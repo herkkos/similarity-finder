@@ -13,8 +13,8 @@ import numpy as np
 import os
 
 FILETYPES = ['.jpg', '.JPG', '.png', '.PNG', 'jpeg', 'JPEG']
-FOLDER = r'C:\Users\herkk\Pictures'
-OUTPUT = r'C:\Users\herkk\Pictures\similar.json'
+FOLDER = r'TODO'
+OUTPUT = r'TODO'
 THRESHOLD = 1
 
 
