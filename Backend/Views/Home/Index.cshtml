@@ -1,0 +1,35 @@
+﻿<div class="jumbotron">
+    <h1>Image Similarity</h1>
+    <p class="lead">For finding similar images from large sets of images</p>
+</div>
+<div>
+    <form action="/api/Service" method="post">
+        <div class="row">
+            <div class="col-md-4">
+                <label for="folderpath">Image folder path</label><br>
+                <input type="text" id="folderpath" name="folderpath"><br>
+                <label for="outputpath">Output file path</label><br>
+                <input type="text" id="outputpath" name="outputpath"><br>
+
+                <br />
+                <br />
+                <input type="submit" value="Execute" />
+            </div>
+            <div class="col-md-4">
+                <input type="radio" id="hash" name="scantype" value="hash">
+                <label for="hash">Hash</label><br>
+                <input type="radio" id="pixel" name="scantype" value="pixel">
+                <label for="pixel">Pixel</label><br>
+                <input type="radio" id="frequency" name="scantype" value="frequency">
+                <label for="frequency">Frequency</label><br>
+                <br />
+                <input type="checkbox" id="jpg" name="jpg" value="jpg">
+                <label for="jpg">JPG</label>
+                <input type="checkbox" id="jpeg" name="jpeg" value="jpeg">
+                <label for="jpeg">JPEG</label>
+                <input type="checkbox" id="png" name="png" value="png">
+                <label for="png">PNG</label>
+            </div>
+        </div>
+    </form>
+</div>
