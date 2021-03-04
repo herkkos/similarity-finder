@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sat Jun 13 12:47:42 2020
+Created on Thu Mar  4 00:47:44 2021
 
 @author: Herkko
 """
@@ -9,49 +9,52 @@ import os
 import json
 import itertools
 import cv2
-import imagehash
 import numpy as np
 
 
-class SpatialSimilarity:
+class PixelSimilarity:
     '''
-    Class to find spatial similarity within images.
+    Class to find pixel similarity within images.
 
     ...
     Attributes
     ----------
     filetypes : string array
-        filetypes to be scanned
+        Filetypes to be scanned.
     folder : string
-        path to folder which contains images
+        Path to folder which contains images.
     output : string
-        path to output file
+        Path to output file.
     threshold : float
-        threshold for similarity, 0 being absolute copy
+        Threshold for similarity, 0 being absolute copy.
 
     Methods
     -------
     findSimilarity(files):
-        returns array of similar images
+        Returns array of similar images.
     getFiles(folders):
-        returns paths to files from folders and subfolders
+        Returns paths to files from folders and subfolders.
     '''
 
     def __init__(self, folder, output, threshold=0.0,
                  filetypes=['.jpg', '.JPG', '.png', '.PNG', 'jpeg', 'JPEG']):
         '''
-        Constructs class for finding similarity between images.
+        Constructs class for finding similarity between images using pixel comparisons.
 
         Parameters
         ----------
         folder : string
-            Path to folder which containts images.
+            Path to folder which contains images.
         output : string
             Path to output file.
-        threshold : float
-            Threshold for image similarity. The default is 0.0.
-        filetypes : string array
-            Filetypes to be scanned.
+        threshold : float, optional
+            Threshold for similarity. The default is 0.0.
+        filetypes : string array, optional
+            Filetypes to be scanned. The default is ['.jpg', '.JPG', '.png', '.PNG', 'jpeg', 'JPEG'].
+
+        Returns
+        -------
+        None.
 
         '''
         self.folder = folder
@@ -64,14 +67,14 @@ class SpatialSimilarity:
         similar_ones = self.find_similarity(image_list)
         write_to_json(similar_ones, self.output)
 
-    def find_similarity(self, images):
+    def find_similarity(self, imagelist):
         '''
         Finds similar images from array of imagehashes.
 
         Parameters
         ----------
-        images : string array
-            array of imagehashes and respective filepaths
+        imagelist : string array
+            Array of images and respective filepaths.
 
         Returns
         -------
@@ -81,9 +84,9 @@ class SpatialSimilarity:
 
         '''
         similar_ones = np.array([])
-        for first_image, second_image in itertools.combinations(images, 2):
+        for first_image, second_image in itertools.combinations(imagelist, 2):
             similarity = first_image[1] - second_image[1]
-            # TODO: implement some kind of normalization for similarity
+            # TODO: Check this
             if similarity <= self.threshold:
                 similar_ones = np.append(
                     similar_ones, (first_image[0], second_image[0]))
@@ -100,7 +103,7 @@ class SpatialSimilarity:
 
         Returns
         -------
-        path_array : array string
+        path_array : string array
             Array of paths to files.
 
         '''
@@ -121,19 +124,19 @@ def load_file(file):
     Parameters
     ----------
     file : string
-        path to file
+        Path to file.
 
     Returns
     -------
-    imhash : hash/string
-        imagehash calculated from file
+    image : integer array
+        Array of integers.
 
     '''
+
     image = cv2.imread(file, 0)
     image = cv2.resize(image, (32, 32), interpolation=cv2.INTER_LINEAR)
-    image = imagehash.Image.fromarray(image)
-    imhash = imagehash.dhash(image, 32)
-    return imhash
+    image = cv2.convertScaleAbs(image)
+    return image
 
 
 def scan(files):
